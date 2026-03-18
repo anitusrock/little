@@ -87,7 +87,91 @@ a:hover {
 }
 
 /* Cards & Thumbnails */
-.thumbnail-variant-1, .thumbnail-classic {
+.card-modern {
+  background: #fff;
+  border-radius: var(--radius-lg);
+  padding: 2.5rem;
+  height: 100%;
+  border: 1px solid var(--border);
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.card-modern::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(79, 70, 229, 0.05) 0%, rgba(79, 70, 229, 0) 100%);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  z-index: -1;
+}
+
+.card-modern:hover {
+  transform: translateY(-12px) scale(1.02);
+  box-shadow: 0 20px 40px -10px rgba(79, 70, 229, 0.15);
+  border-color: var(--primary);
+}
+
+.card-modern:hover::before {
+  opacity: 1;
+}
+
+.card-modern i, .card-modern .icon {
+  font-size: 3rem;
+  color: var(--primary);
+  margin-bottom: 1.5rem;
+  display: inline-block;
+  transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.card-modern:hover i, .card-modern:hover .icon {
+  transform: scale(1.2) rotate(5deg);
+}
+
+/* Floating Animation */
+.animate-float {
+  animation: floating 3s ease-in-out infinite;
+}
+
+@keyframes floating {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-15px); }
+  100% { transform: translateY(0px); }
+}
+
+/* Scroll Reveal Base */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.reveal.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Text Shimmer Effect */
+.text-shimmer {
+  background: linear-gradient(to right, var(--primary) 0%, #fff 50%, var(--primary) 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 3s linear infinite;
+}
+
+@keyframes shimmer {
+  to { background-position: 200% center; }
+}
+
+/* Image Hover Zoom */
+.thumbnail-variant-1 {
   border-radius: var(--radius-lg);
   overflow: hidden;
   box-shadow: var(--shadow-sm);
@@ -95,9 +179,47 @@ a:hover {
   border: 1px solid var(--border);
 }
 
-.thumbnail-variant-1:hover, .thumbnail-classic:hover {
+.thumbnail-variant-1:hover {
   box-shadow: var(--shadow-lg);
   transform: translateY(-4px);
+}
+
+.thumbnail-classic {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s ease;
+  border: 1px solid var(--border);
+  position: relative;
+}
+
+.thumbnail-classic img {
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.thumbnail-classic:hover img {
+  transform: scale(1.1);
+}
+
+.thumbnail-classic::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.2) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.thumbnail-classic:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-4px);
+}
+
+.thumbnail-classic:hover::after {
+  opacity: 1;
 }
 
 /* Navbar Improvements */
@@ -108,7 +230,7 @@ a:hover {
 }
 
 .rd-navbar-top-panel {
-  background-color: var(--surface) !important;
+  background-color: #ffffff !important;
   border-bottom: 1px solid var(--border) !important;
   color: var(--text-muted) !important;
 }
@@ -181,10 +303,40 @@ a:hover {
 /* Page Loader */
 .page-loader {
   background: var(--background) !important;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  transition: all 0.5s ease;
+  visibility: visible;
+  opacity: 1;
 }
 
-.cssload-loader-inner {
-  border-top-color: var(--primary) !important;
+.page-loader.loaded {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.page-loader-body {
+  text-align: center;
+}
+
+.page-loader-body img {
+  max-width: 200px;
+  height: auto;
+  animation: pulse 2s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0% { transform: scale(0.95); opacity: 0.8; }
+  50% { transform: scale(1.05); opacity: 1; }
+  100% { transform: scale(0.95); opacity: 0.8; }
 }
 
 /* Helpers */
@@ -217,10 +369,12 @@ a:hover {
   padding: 10px 0 !important;
 }
 
-.rd-navbar-static .rd-navbar-brand img {
+.rd-navbar-static .rd-navbar-brand img,
+.rd-navbar-mobile-brand img {
   max-height: 70px !important;
   width: auto !important;
   max-width: none !important;
+  mix-blend-mode: multiply;
 }
 
 .rd-navbar-static .rd-navbar-nav-wrap {
